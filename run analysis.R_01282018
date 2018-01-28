@@ -1,0 +1,52 @@
+xtest = read.table("C:\\Users\\RAMON R. PIO RODA\\Desktop\\R Dataset\\test\\X_test.txt", header = FALSE)
+ytest = read.table("C:\\Users\\RAMON R. PIO RODA\\Desktop\\R Dataset\\test\\Y_test.txt", header = FALSE) 
+xtraining = read.table("C:\\Users\\RAMON R. PIO RODA\\Desktop\\R Dataset\\train\\X_train.txt", header = FALSE)
+ytraining = read.table("C:\\Users\\RAMON R. PIO RODA\\Desktop\\R Dataset\\train\\Y_train.txt", header = FALSE)  
+ 
+##Naming column of y_test to testy
+ytest_name = paste('testy',1,sep="")
+names(ytest) = ytest_name
+
+##Naming column of x_test to testx1...
+xtest_name = paste('testx',1:ncol(xtest),sep="")
+names(xtest) = xtest_name
+
+##Combining y_test and x_test 
+test_data = cbind(ytest,xtest)
+
+##Naming column of y_train to trainy
+ytrain_name = paste('trainy',1,sep="")
+names(ytraining) = ytrain_name
+
+##Naming column of x_train to trainx1...
+xtrain_name = paste('trainx',1:ncol(xtraining),sep="")
+names(xtraining) = xtrain_name
+train_data = cbind(ytraining,xtraining)
+
+##Adding row names to be used for merging
+rownames(test_data) = paste("RN",1:nrow(test_data),sep="")
+rownames(train_data) = paste("RN",1:nrow(train_data),sep="")
+
+##Merging Test data and Train data
+merge_data = merge(train_data,test_data,by="row.names",all=TRUE)
+
+##Getting the mean of each column and naming the output coulumn to Mean
+mean = data.frame(colMeans(merge_data[sapply(merge_data,is.numeric)],na.rm=TRUE))
+mean_name = paste('Mean',"",sep="")
+names(mean) = mean_name
+
+##Getting the sd of each column and naming the output coulumn to Standard Deviation
+sd = data.frame(apply(merge_data[,2:ncol(merge_data)],2,sd,na.rm=TRUE))
+sd_name = paste('Standard Deviation',"",sep="")
+names(sd) = sd_name
+
+##Merging the statistics
+stat = cbind(mean,sd)
+
+##additional statements##
+View(merge_data)
+> View(merge_data)
+> View(merged_data)
+> View(stat)
+> write.table(stat, "C:\\Users\\RAMON R. PIO RODA\\Desktop\\R Dataset\\stat.txt", sep=",",row.names = FALSE)
+  
